@@ -21,3 +21,7 @@ See our [developers handbook](https://vufind.org/wiki/development) for more info
 
 
 This version is for FXPLUS on behalf of Universities Exeter asnd Falmouth
+
+OK so I edit this and then save it
+
+This is Jamies local copy
