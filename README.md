@@ -1,6 +1,5 @@
-[![Build Status](https://travis-ci.org/vufind-org/vufind.svg?branch=master)](https://travis-ci.org/vufind-org/vufind)
-VuFind
-======
+VuFind for FXPlus
+=================
 
 Introduction
 ------------
@@ -12,6 +11,4 @@ Installation
 ------------
 See online documentation at https://vufind.org/wiki/installation
 
-Contributing
-------------
-See our [developers handbook](https://vufind.org/wiki/development) for more information.
+This is VuFind2s README.md
