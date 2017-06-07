@@ -1,0 +1,128 @@
+
+Things to do identified :
+
+DONE  1.  Refworks exports not working
+DOING 2.  Shibboleth/ldap login
+DONE  3.  Journal holdings data display
+DONE  4.  Home page links
+DONE  5.  Syndetics TOC and summaries - are they showing ?
+    Should be but seems different to Voyager
+DONE  6.  DVD Video links to Voyager records from Streaming records - how to manage these ?
+    May need to edit MARC records before loading VuFind
+DONE  7.  "Check availability of full text (Falmouth)" link to SFX on Voyager needs to be added to records with an ISSN as in Voyager.
+DONE  8.  In journal records 'Indexed in' not displaying ( data from MARC 510 field).
+DONE  9.  Change label of request button/link
+10.  New filter groups e.g. video items (DVD/Streaming & VHS) for example. Replicate existing filters in Voyager.
+DONE  11.  Return to original search breadcrumb
+12.  Possible colour coding of e-books  / books of the same title. Way of displaying e and print together in some way
+
+#######################################################################################################
+28-02-2017 -   Added .ini files to C:\Vufind\vufind-3.1.2\vufind-3.1.2\local\config\vufind so that local configuration changes do not change core VuFind files. Do not change the .ini files in C:\Vufind\vufind-3.1.2\vufind-3.1.2\config\vufind.
+    CONFIG.INI: set ILS driver (and Summon), cover images and general VuFind settings.
+    VOYAGERRESTFUL.INI: set Voyager connection details.
+    FACETS.INI: comment out INSTITUTION and BUILDING facets (until we sort out Falmouth/Penryn buildings), change LC call numbers to dewey
+    SEARCHES.INI: set to dewey search, turn on spellchecker (this currently has issues!! - sorted by re-indexing records)
+
+28-02-2017 -   Changed logo in C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootprint3\less\bootprint.less to Exe and Fal logo
+    NOTE: when a .less file is edited run C:\Vufind\vufind-3.1.2\vufind-3.1.2\util\cssBuilder.php which will compile and compact all the css theme files into compiled.css.
+
+02-03-2017 -   Changed login form to barcode/surname in C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootstrap3\templates\Auth\AbstractBase\loginfields.phtml
+
+03-03-2017 -   Changed C:\Vufind\vufind-3.1.2\vufind-3.1.2\module\VuFind\src\VuFind\ILS\Driver\Voyager.php to make 'Circulation Review' items Available instead of showing as Checked Out. Added:
+      case 'Circulation Review':
+                  $notCharged = true;
+                  break;
+    Line 293
+                Need to find out how to override these kind of changes in local folder similar to config (.INI) changes to avoid changing core files as upgrades will become probmatic
+
+06-03-2017 -   Changed main colour (@brand-primary) to #008da8; //Library website greeny bluey colour! in C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootprint3\less\bootprint.less.
+    Had to run C:\Vufind\vufind-3.1.2\vufind-3.1.2\util\cssBuilder.php (cmd prompt php C:\Vufind\vufind-3.1.2\vufind-3.1.2\util\cssBuilder.php) to get the compiled.css to be recreated.
+    (Old colour was #619144)
+
+06-03-2017 -  Ran C:\Vufind\vufind-3.1.2\vufind-3.1.2\util\optimize.php after re-importing all MARC records: this sorts out indexing and spelling suggestions.
+
+08-03-2017 -  Added link to Ask a librarian in C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootstrap3\templates\footer.phtml.  This link is hard coded at the moment whilst Zend helper is sussed out.
+
+08-03-2017 -  Added Summon API key to config.ini. Copied summon.ini to local config folder.  Changed defaultModule in config.ini to "Combined" from "Search": this makes default search page a combined search, displaying column from catalogue and one from Summon rather than seperate tabs (although tabs are still displayed in case user wishes to search separately). VUFIND2 to still set to "search" and displays two tabs but defaults to catalogue search.
+
+09-03-2017 -  Turned on Solr and Summon Search History Labels in config.ini so users can identify which searches came from which modules.
+
+10-03-2017 -  Added location (Campus) facet by:
+                    adding marc.combine_records = 852 marc.combine_records.left_field = 001 marc.combine_records.right_field = 004 to C:\Vufind\vufind-3.1.2\vufind-3.1.2\local\import\import.properties;
+                    adding building = 852b, locations.properties(locations) to marc_local.properties file in same dir as above;
+                    adding locations.properties file to C:\Vufind\vufind-3.1.2\vufind-3.1.2\import\translation_maps (this file contains all location codes with "= Penryn" or "=Falmouth");
+                    edited C:\Vufind\vufind-3.1.2\vufind-3.1.2\local\config\vufind\facets.ini to show building as Location. (change to whatever)
+                    See https://vufind.org/wiki/indexing:marc:export_notes for full details.
+
+28-03-2017 - Added LDAP login functionality by:
+                   setting all LDAP options in config.ini
+                           - map college = edupersontargetedid which is Voyager patron institution_id
+                           - [ChoiceAuth] choice_order = ILS,LDAP
+                   Edit LDAP.php at C:\[Vufind dir]\module\VuFind\src\VuFind\Auth find function protected function processLDAPUser($username, $data)
+                           - see file for code
+                           - basically get institution_id from LDAP data
+                           - query Voyager to get patron barcode
+                           - and log user in with these details which will match Voyager login account
+
+05-04-2017 - Changed facets sidebar to left side by editing config.ini entry:
+                            - ; Show sidebar on the left side instead of right
+                            - sidebarOnLeft = true
+
+05-04-2017 - Altered Hold requests to always show request link (same as Voyager OPAC)
+                            - holds_mode = "disabled" - this prevents the "Login to see holds status" message
+                            - title_level_holds_mode = "always" - this shows the "Make a request" link for all titles; user is requested to login before title is checked to see if requestable.
+                            - This is not ideal but VuFind requires user login before checking if item is requestable but seems better than other option combinations tried so far.
+
+06-04-2017 - Removed "extra" 856 link from holdings tab as it was being shown under the Online Access section of main record display.
+                            - Removed following lines from C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootstrap3\templates\RecordTab\holdingsils.phtml:
+                            - <? if (!empty($urls) || $openUrlActive): ?>
+                                     <h3><?=$this->transEsc("Internet")?></h3>
+                                     <? if (!empty($urls)): ?>
+                                         <? foreach ($urls as $current): ?>
+                                               <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>"><?=$this->escapeHtml($current['desc'])?></a><br/>
+                                         <? endforeach; ?>
+                                     <? endif; ?>
+                                     <? if ($openUrlActive): ?><?=$openUrl->renderTemplate()?><? endif; ?>
+                              <? endif; ?>
+
+07-04-2017 - Changed breadcrumb to only show "Back to Title Result List" (sa Voyager)
+                            - Editing file C:\GitVufind\themes\bootstrap3\templates\record\view.phtml
+                                      - Change following lines:
+                                      // Set up breadcrumbs:
+                                      $this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink($this->transEsc('Search Breadcrumb'), '', '</li> ') .  '<li class="active">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> ';
+                                      $this->layout()->title = $this->driver->getShortTitle();
+                                      - to just $this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink($this->transEsc('Search Breadcrumb'), '', '</li> '); This removes the link to current record page. Note that transEsc now states Search Breadcrumb.
+                                      - add entry to en.ini in local/languages: Search Breadcrumb = "Back to Title Result List"
+                                      -  around line 787 comment out/remove following line: $this->layout()->breadcrumbsbreadcrumbs .= '<li class="active">' . $this->transEsc($desc) . '</li>'; as this puts "/ Holdings" as breadcrumb which is just silly!
+
+18-04-2017 - Added "Home" link next to logo to take user back to main search page
+                            - Edit C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootstrap3\templates\header.phtml add:
+                                <a class="navbar-home" href="<?=$this->url('home')?>" title="New Search">SEARCH</a>
+                              under the logo link (line 7)
+                            - Add ".navbar-home" to C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootprint3\less\bootprint.less
+                                 .navbar-home {
+                                  color: transparent;
+                                  background-image: ~"url('../../bootprint3/images/icons/house.png')";
+                                  background-position: center center;
+                                  background-repeat: no-repeat;
+                                  background-size: contain;
+                                  height: 16px;
+                                  margin: 0;
+                                  padding-top: 70px;
+                                  padding-left: 20px;
+                                  text-shadow: none;
+                                  vertical-align: text-bottom;
+                                  width: 16px;
+                                  float: left;
+                                  }
+                              make sure class is in "header .navbar" section (place just above ".navbar-brand"
+
+18-05-2017 - Sorted displaying journal issues
+                    -  Changed MARC processing script "vufindVoyagerMARC.pl" (C:\VoyagerStuff\VufindStuff on TRLIBJASPER) to add all 852 (location), 853 (run/issue formatting field), 863 (back issue field, created by acqu. module, plus added location to subfield "X"), 866 ('manual' back issues field, plus added location to "X" subfield). Did it this way rather than using Voyager holdings records as import into Vufind didn't 'like' multiple fields from matching holdings records.
+                    -  Added function definitions "getOlderIssues" and "getOtherOlderIssues" to C:\Vufind\vufind-3.1.2\vufind-3.1.2\module\VuFind\src\VuFind\RecordDriver\SolrDefault.php.
+                    - Added code for above functions to C:\Vufind\vufind-3.1.2\vufind-3.1.2\module\VuFind\src\VuFind\RecordDriver\SolrMarc.php.  Functions take location as variable to match holdings, reads the relavant fields from MARC record (formatted in case of 863 fields), return string array.
+                    - Added display code to C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootstrap3\templates\RecordTab\holdingsils.phtml. Calls the above functions.
+
+18-05-2017 - Sorted displaying Syndetics TOC and SUMMARY
+                    -  Edited C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootstrap3\templates\RecordDriver\SolrDefault\core.phtml to add Syndetics div code. Checked if record already has summary in MARC record, if not display Syndetics summary.
+                    -  Added whole of syndetics.css (got from Voyager) to C:\Vufind\vufind-3.1.2\vufind-3.1.2\themes\bootstrap3\less\components\record.less and recompiled CSS folders.
