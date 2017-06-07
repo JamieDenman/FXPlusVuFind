@@ -11,4 +11,17 @@ composer.phar
 import/solrmarc.log
 node_modules
 
-local/config/vufind/
+# GNU Emacs temporary files
+
+ChangeLog
+\#*
+.\#*
+TAGS
+*~
+/vendor
+composer.lock
+composer.phar
+import/solrmarc.log
+node_modules
+
+/local/config/vufind/
