@@ -12,3 +12,4 @@ Installation
 See online documentation at https://vufind.org/wiki/installation
 
 This is VuFind2s README.md
+WHY ISNT THIS ON MY PC YET?
