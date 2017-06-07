@@ -25,3 +25,5 @@ This version is for FXPLUS on behalf of Universities Exeter asnd Falmouth
 OK so I edit this and then save it
 
 This is Jamies local copy
+
+Have played with gitignore and not pushing .ini files from local anymore?
