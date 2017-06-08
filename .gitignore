@@ -5,10 +5,14 @@ ChangeLog
 .\#*
 TAGS
 *~
+/downloads
+/solr/vendor/
+/solr/vufind/hsperfdata_localuser/
 /vendor
 composer.lock
 composer.phar
 import/solrmarc.log
 node_modules
+public/swagger-ui
 
 /local/config/vufind/
