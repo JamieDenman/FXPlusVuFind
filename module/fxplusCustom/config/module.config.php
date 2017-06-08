@@ -467,7 +467,7 @@ $config = [
                     'solrmarcremote' => 'VuFind\RecordDriver\Factory::getSolrMarcRemote',
                     'solrreserves' => 'VuFind\RecordDriver\Factory::getSolrReserves',
                     'solrweb' => 'VuFind\RecordDriver\Factory::getSolrWeb',
-                    'summon' => 'VuFind\RecordDriver\Factory::getSummon',
+                    'summon' => 'fxplusCustom\RecordDriver\Factory::getSummon',
                     'worldcat' => 'VuFind\RecordDriver\Factory::getWorldCat',
                 ],
                 'invokables' => [
